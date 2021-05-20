@@ -100,7 +100,7 @@ const Header = ({ history }) => {
   }
 
   useEffect(() => {
-    if (!gotUserInfo) {
+    if (!gotUserInfo && userInfo) {
       dispatch(getUser(userInfo._id))
     }
   }, [createTeamSuccess, updateTeamSuccess, dispatch, userInfo, gotUserInfo])
