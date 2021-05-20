@@ -28,11 +28,11 @@ const userSchema = new mongoose.Schema(
     },
     photoLg: {
       type: String,
-      default: 'default.png',
+      default: 'default.jpeg',
     },
     photoSm: {
       type: String,
-      default: 'default.png',
+      default: 'default.jpeg',
     },
   },
   {

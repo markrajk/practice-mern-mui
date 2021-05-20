@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { makeStyles } from '@material-ui/core/styles'
 
 export const Container = styled.div`
   ${({ theme }) => css`
@@ -163,3 +164,38 @@ export const SubmitButton = styled.button`
     cursor: pointer;
   `}
 `
+export const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: '1em 0',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
+
+  card: {
+    width: '100%',
+    maxWidth: '600px',
+    padding: theme.spacing(5),
+    paddingBottom: theme.spacing(0),
+    boxShadow: theme.shadows[3],
+
+    '& > *': {
+      marginBottom: theme.spacing(2),
+    },
+  },
+  // chip: {
+  //   fontSize: '1.5em',
+  // },
+  cardFooter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+
+    '& > *:first-of-type': {
+      marginRight: '1em',
+    },
+  },
+}))

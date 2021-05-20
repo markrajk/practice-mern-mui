@@ -15,10 +15,22 @@ import {
   CancelButton,
   Members,
   MemberItem,
+  useStyles,
 } from './styles'
+import {
+  Avatar,
+  Chip,
+  Card,
+  Typography,
+  TextField,
+  Button,
+  CardActions,
+} from '@material-ui/core'
 import BinIcon from '../../components/Icons/BinIcon'
+import DoneIcon from '@material-ui/icons/Done'
 
 const CreateTeamScreen = ({ history }) => {
+  const classes = useStyles()
   const dispatch = useDispatch()
 
   const createdTeam = useSelector((state) => state.createTeam)
@@ -64,8 +76,17 @@ const CreateTeamScreen = ({ history }) => {
   }, [success, history, team, teamCreated])
 
   return (
-    <Container>
-      <ContentWrapper>
+    <Card className={classes.card} variant="outlined">
+      <Typography variant="h4">Create new team</Typography>
+      <TextField
+        type="text"
+        id="filled-full-width"
+        label="Team name"
+        fullWidth
+        variant="outlined"
+        onChange={(e) => setTeam({ ...team, name: e.currentTarget.value })}
+      />
+      {/* <ContentWrapper>
         <Title>Create new team</Title>
         <SubTitle>Enter the fields bellow to create you team.</SubTitle>
 
@@ -77,30 +98,82 @@ const CreateTeamScreen = ({ history }) => {
         />
 
         <Label htmlFor="search-box">Team members</Label>
-        <SearchBox team={team} addUser={handleAddUser} />
-      </ContentWrapper>
+        
+      </ContentWrapper> */}
+      <SearchBox team={team} addUser={handleAddUser} />
 
-      <Members>
+      <div className={classes.root}>
         {team &&
           team.members.map((member, index) => (
-            <MemberItem key={member._id || index}>
-              <p>{member.fullName}</p>
-              <i onClick={(e) => handleDeleteUser(member)}>
-                <BinIcon />
-              </i>
-            </MemberItem>
-          ))}
-      </Members>
+            // <MemberItem key={member._id || index}>
+            //   <p>{member.fullName}</p>
+            //   <i onClick={(e) => handleDeleteUser(member)}>
+            //     <BinIcon />
+            //   </i>
+            // </MemberItem>
+            <>
+              {console.log(member, 'TEST!!!!')}
+              {/* <Chip
+                key={member._id || index}
+                avatar={<Avatar src={`/img/users/${member.photoSm}`} />}
+                label={member.fullName}
+                onClick={(e) => handleDeleteUser(member)}
+                deleteIcon={<DoneIcon />}
+              /> */}
 
-      <ContentWrapper style={{ paddingTop: '3em', marginTop: 'auto' }}>
+              <Chip
+                size="large"
+                className={classes.chip}
+                avatar={
+                  <Avatar
+                    alt={member.fullName}
+                    src={`/img/users/${member.photoSm}`}
+                  />
+                }
+                label={member.fullName}
+                onDelete={(e) => handleDeleteUser(member)}
+                variant="outlined"
+              />
+              {/* <Chip
+                avatar={
+                  <Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />
+                }
+                label="Deletable"
+                onDelete={handleDeleteUser(member)}
+              /> */}
+              {/* <Chip label="Basic" /> */}
+            </>
+          ))}
+      </div>
+
+      <div className={classes.cardFooter}>
+        <Button
+          variant="contained"
+          size="large"
+          color="danger"
+          onClick={(e) => history.push('/')}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={(e) => handleTeamCreate(team)}
+        >
+          Create
+        </Button>
+      </div>
+
+      {/* <ContentWrapper style={{ paddingTop: '3em', marginTop: 'auto' }}>
         <Buttons>
           <CancelButton onClick={(e) => history.push('/')}>Cancel</CancelButton>
           <SubmitButton onClick={(e) => handleTeamCreate(team)}>
             Create team
           </SubmitButton>
         </Buttons>
-      </ContentWrapper>
-    </Container>
+      </ContentWrapper> */}
+    </Card>
   )
 }
 
