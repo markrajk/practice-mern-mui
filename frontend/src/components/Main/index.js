@@ -7,10 +7,12 @@ const Main = ({ children }) => {
     <Container
       maxWidth="lg"
       style={{
-        paddingTop: '7.5em',
+        paddingTop: '2.5em',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
+        width: '100%',
+        height: 'calc(100% - 64px)',
       }}
     >
       {children}

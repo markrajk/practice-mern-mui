@@ -17,7 +17,11 @@ import {
 } from '../controllers/teamController.js'
 import { createInvitation } from '../controllers/invitationController.js'
 
+import questionRouter from './questionRoutes.js'
+
 const router = express.Router()
+
+router.use('/:teamId/questions', questionRouter)
 
 router.use(protect)
 

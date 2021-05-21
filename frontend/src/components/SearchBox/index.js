@@ -35,8 +35,25 @@ const SearchBox = ({ team, addUser, invitational }) => {
     console.log(users)
     if (!users) {
       dispatch(getAllUsers(''))
+    } else {
+      const newArr = users
+        .map((user) => {
+          if (
+            ![team.owner, ...team.admins, ...team.members].find(
+              (member) => member._id === user._id
+            )
+          ) {
+            return user
+          } else {
+            return undefined
+          }
+        })
+        .filter((filter) => filter)
+      console.log(newArr, 'NEW ARR')
+      setOptions(newArr)
+      console.log([team.owner, ...team.admins, ...team.members], 'TEAM')
+      console.log(users, 'USERS')
     }
-    setOptions(users)
   }, [dispatch, users, team])
 
   return (

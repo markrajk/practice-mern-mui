@@ -15,7 +15,7 @@ export default createGlobalStyle`
     }
 
     body {
-      /* height: 100vh; */
+      height: 100vh;
       box-sizing: border-box;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
@@ -31,9 +31,9 @@ export default createGlobalStyle`
       } */
     }
 
-    /* #root {
+    #root {
       height: 100%;
       min-height: 100%;
-    } */
+    }
   `}
 `

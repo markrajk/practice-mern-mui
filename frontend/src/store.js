@@ -38,6 +38,12 @@ import {
   getOneChartReducer,
   createChartReducer,
 } from './reducers/chartReducers'
+import {
+  getAllQuestionsReducer,
+  createQuestionReducer,
+  updateQuestionReducer,
+  deleteQuestionReducer,
+} from './reducers/questionReducers'
 
 const reducer = combineReducers({
   userSignup: userSignupReducer,
@@ -65,6 +71,10 @@ const reducer = combineReducers({
   updateChart: updateChartReducer,
   getOneChart: getOneChartReducer,
   createChart: createChartReducer,
+  getAllQuestions: getAllQuestionsReducer,
+  createQuestion: createQuestionReducer,
+  updateQuestion: updateQuestionReducer,
+  deleteQuestion: deleteQuestionReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

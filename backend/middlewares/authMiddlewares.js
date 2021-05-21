@@ -47,7 +47,8 @@ export const protect = catchAsync(async (req, res, next) => {
 
 export const restrictToTeamRoles = (...roles) =>
   catchAsync(async (req, res, next) => {
-    const team = await Team.findById(req.params.id)
+    const id = req.params.teamId || req.params.id
+    const team = await Team.findById(id)
 
     if (!team) {
       return next(new AppError('There is no team with that id', 403))
@@ -76,6 +77,11 @@ export const setUserIds = (req, res, next) => {
   next()
 }
 
+// export const setTeamIds = (req, res, next) => {
+//   if (req.params.teamId) req.body.team = req.params.teamId
+//   next()
+// }
+
 export const setOwnerIds = (req, res, next) => {
   if (!req.body.user) req.body.owner = req.user.id
   next()
@@ -87,7 +93,13 @@ export const setReceiverIds = (req, res, next) => {
 }
 
 export const setTeamIds = (req, res, next) => {
-  if (req.params.id) req.body.team = req.params.id
+  if (req.params.teamId) {
+    req.body.team = req.params.teamId
+    return next()
+  } else if (req.params.id) {
+    req.body.team = req.params.teamId
+    return next()
+  }
   next()
 }
 

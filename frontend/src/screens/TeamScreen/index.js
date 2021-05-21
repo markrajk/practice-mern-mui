@@ -54,8 +54,6 @@ const TeamScreen = ({ match, history }) => {
 
   const rowElements = useRef([])
 
-  const getRef = (element) => rowElements.current.push(element)
-
   const isAdmin = (team) => {
     if (team.admins.some((user) => user._id === userInfo._id)) return true
     return false
@@ -69,16 +67,6 @@ const TeamScreen = ({ match, history }) => {
   const [userList, setUserList] = useState([])
 
   const handleAddUser = (user) => {
-    // console.log(
-    //   team.members.some((el) => {
-    //     return JSON.stringify(el) === JSON.stringify(user)
-    //   })
-    // )
-    // console.log(
-    //   team.members.find((member) => member._id === user._id),
-    //   user
-    // )
-
     if (
       team.members.some((el) => {
         return el._id === user._id
@@ -87,20 +75,9 @@ const TeamScreen = ({ match, history }) => {
     )
       return
 
-    // if (
-    //   team.members.some((el) => {
-    //     return JSON.stringify(el) === JSON.stringify(user)
-    //   }) ||
-    //   userInfo._id === user._id
-    // )
-    //   return
-
     const newArr = [...userList, user]
-    // const newArr = [...team.members, user].map((member) => member._id)
 
     setUserList(newArr)
-
-    //handleUpdate(undefined, newArr)
   }
 
   const handleDeleteUser = (user) => {
@@ -117,6 +94,7 @@ const TeamScreen = ({ match, history }) => {
     const newArr = [...team.members, ...userList].map((member) => member._id)
     handleUpdate(undefined, newArr)
     dispatch(getTeam(match.params.id))
+    hadleModalClose()
   }
 
   const handleUserDelete = (e, id) => {
