@@ -69,6 +69,7 @@ const Header = ({ history }) => {
   const handleLogout = () => {
     dispatch(logout())
     handleMenuClose()
+    history.push('/')
   }
 
   const handleProfileMenuOpen = (event) => {

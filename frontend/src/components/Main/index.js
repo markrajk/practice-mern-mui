@@ -1,8 +1,21 @@
 import React from 'react'
-import { Container } from './styles'
+// import { Container } from './styles'
+import { Container } from '@material-ui/core'
 
 const Main = ({ children }) => {
-  return <Container>{children}</Container>
+  return (
+    <Container
+      maxWidth="lg"
+      style={{
+        paddingTop: '7.5em',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+      }}
+    >
+      {children}
+    </Container>
+  )
 }
 
 export default Main

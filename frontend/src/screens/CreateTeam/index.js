@@ -3,20 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createTeam } from '../../actions/teamActions'
 
 import SearchBox from '../../components/SearchBox'
-import {
-  Container,
-  Title,
-  SubTitle,
-  Input,
-  Label,
-  ContentWrapper,
-  Buttons,
-  SubmitButton,
-  CancelButton,
-  Members,
-  MemberItem,
-  useStyles,
-} from './styles'
+import { useStyles } from './styles'
 import {
   Avatar,
   Chip,
@@ -26,8 +13,6 @@ import {
   Button,
   CardActions,
 } from '@material-ui/core'
-import BinIcon from '../../components/Icons/BinIcon'
-import DoneIcon from '@material-ui/icons/Done'
 
 const CreateTeamScreen = ({ history }) => {
   const classes = useStyles()
@@ -86,63 +71,25 @@ const CreateTeamScreen = ({ history }) => {
         variant="outlined"
         onChange={(e) => setTeam({ ...team, name: e.currentTarget.value })}
       />
-      {/* <ContentWrapper>
-        <Title>Create new team</Title>
-        <SubTitle>Enter the fields bellow to create you team.</SubTitle>
 
-        <Label htmlFor="team-name">Team name</Label>
-        <Input
-          type="text"
-          id="team-name"
-          onChange={(e) => setTeam({ ...team, name: e.currentTarget.value })}
-        />
-
-        <Label htmlFor="search-box">Team members</Label>
-        
-      </ContentWrapper> */}
       <SearchBox team={team} addUser={handleAddUser} />
 
       <div className={classes.root}>
         {team &&
           team.members.map((member, index) => (
-            // <MemberItem key={member._id || index}>
-            //   <p>{member.fullName}</p>
-            //   <i onClick={(e) => handleDeleteUser(member)}>
-            //     <BinIcon />
-            //   </i>
-            // </MemberItem>
-            <>
-              {console.log(member, 'TEST!!!!')}
-              {/* <Chip
-                key={member._id || index}
-                avatar={<Avatar src={`/img/users/${member.photoSm}`} />}
-                label={member.fullName}
-                onClick={(e) => handleDeleteUser(member)}
-                deleteIcon={<DoneIcon />}
-              /> */}
-
-              <Chip
-                size="large"
-                className={classes.chip}
-                avatar={
-                  <Avatar
-                    alt={member.fullName}
-                    src={`/img/users/${member.photoSm}`}
-                  />
-                }
-                label={member.fullName}
-                onDelete={(e) => handleDeleteUser(member)}
-                variant="outlined"
-              />
-              {/* <Chip
-                avatar={
-                  <Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />
-                }
-                label="Deletable"
-                onDelete={handleDeleteUser(member)}
-              /> */}
-              {/* <Chip label="Basic" /> */}
-            </>
+            <Chip
+              size="large"
+              className={classes.chip}
+              avatar={
+                <Avatar
+                  alt={member.fullName}
+                  src={`/img/users/${member.photoSm}`}
+                />
+              }
+              label={member.fullName}
+              onDelete={(e) => handleDeleteUser(member)}
+              variant="outlined"
+            />
           ))}
       </div>
 
@@ -164,15 +111,6 @@ const CreateTeamScreen = ({ history }) => {
           Create
         </Button>
       </div>
-
-      {/* <ContentWrapper style={{ paddingTop: '3em', marginTop: 'auto' }}>
-        <Buttons>
-          <CancelButton onClick={(e) => history.push('/')}>Cancel</CancelButton>
-          <SubmitButton onClick={(e) => handleTeamCreate(team)}>
-            Create team
-          </SubmitButton>
-        </Buttons>
-      </ContentWrapper> */}
     </Card>
   )
 }
