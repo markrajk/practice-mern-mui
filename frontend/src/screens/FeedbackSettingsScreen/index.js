@@ -35,8 +35,10 @@ const FeedbackSettingsScreen = ({ match }) => {
   const deletedQuestion = useSelector((state) => state.deleteQuestion)
   const { success: deleteSuccess } = deletedQuestion
 
-  const [category, setCategory] = useState('all')
-  const [newCategory, setNewCategory] = useState('all')
+  const [category, setCategory] = useState(
+    localStorage.getItem('questionCategory') || 'subordinate'
+  )
+  const [newCategory, setNewCategory] = useState('subordinate')
   const [newType, setNewType] = useState('text')
   const [newQuestion, setNewQuestion] = useState('')
   const [open, setOpen] = React.useState(false)
@@ -47,13 +49,14 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   const handleClose = () => {
     setOpen(false)
-    setNewCategory('all')
-    setNewType('text')
+    // setNewCategory('all')
+    // setNewType('text')
     setNewQuestion('')
   }
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value)
+    localStorage.setItem('questionCategory', event.target.value)
   }
 
   const handleNewCategoryChange = (event) => {
@@ -88,6 +91,8 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   useEffect(() => {
     dispatch(getAllQuestions(match.params.id))
+    // setNewQuestion(localStorage.getItem('questionCategory'))
+    console.log(category)
   }, [dispatch, match, success, deleteSuccess, createSuccess])
 
   return (
@@ -101,16 +106,16 @@ const FeedbackSettingsScreen = ({ match }) => {
             <InputLabel htmlFor="age-native-simple">Select category</InputLabel>
             <Select
               native
-              value={category}
+              value={localStorage.getItem('questionCategory')}
               onChange={handleCategoryChange}
               inputProps={{
                 name: 'category',
                 id: 'category',
               }}
             >
-              <option value={'all'}>All</option>
+              <option value={'subordinate'}>Subordinate</option>
+              <option value={'supervisor'}>Supervisor</option>
               <option value={'peers'}>Peers</option>
-              <option value={'lead'}>Lead</option>
               <option value={'self'}>Self</option>
             </Select>
           </FormControl>
@@ -154,9 +159,9 @@ const FeedbackSettingsScreen = ({ match }) => {
                   id: 'category',
                 }}
               >
-                <option value={'all'}>All</option>
+                <option value={'subordinate'}>Subordinate</option>
+                <option value={'supervisor'}>Supervisor</option>
                 <option value={'peers'}>Peers</option>
-                <option value={'lead'}>Lead</option>
                 <option value={'self'}>Self</option>
               </Select>
             </FormControl>

@@ -192,7 +192,7 @@ const GiveFeedbackScreen = ({ match }) => {
                   variant="contained"
                   onClick={(e) => handleModalCategoryClick('self')}
                 >
-                  Self Feedback
+                  Self Evaluation
                 </Button>
               ) : (
                 <>
@@ -200,9 +200,9 @@ const GiveFeedbackScreen = ({ match }) => {
                     <Button
                       color="primary"
                       variant="contained"
-                      onClick={(e) => handleModalCategoryClick('lead')}
+                      onClick={(e) => handleModalCategoryClick('subordinate')}
                     >
-                      Leader Feedback
+                      Subordinate Feedback
                     </Button>
                   )}
                   {checkMemberRole(selectedUser, team) ===
@@ -210,20 +210,29 @@ const GiveFeedbackScreen = ({ match }) => {
                     <Button
                       color="primary"
                       variant="contained"
-                      onClick={(e) => handleModalCategoryClick('peer')}
+                      onClick={(e) => handleModalCategoryClick('peers')}
                     >
-                      Peer Feedback
+                      P2P Feedback
+                    </Button>
+                  )}
+                  {checkMyRole(team) === 3 && (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={(e) => handleModalCategoryClick('supervisor')}
+                    >
+                      Supervisory Feedback
                     </Button>
                   )}
                 </>
               )}
-              <Button
+              {/* <Button
                 color="primary"
                 variant="contained"
                 onClick={(e) => handleModalCategoryClick('all')}
               >
                 All Feedback
-              </Button>
+              </Button> */}
             </div>
           </div>
         </Modal>

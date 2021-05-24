@@ -37,6 +37,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import EqualizerIcon from '@material-ui/icons/Equalizer'
 import FeedbackIcon from '@material-ui/icons/Feedback'
 import SendIcon from '@material-ui/icons/Send'
+import { isOwnerOrAdminUser } from '../../utils/helperFunctions'
 import { useTheme } from '@material-ui/core/styles'
 
 import { useStyles } from './styles'
@@ -47,10 +48,13 @@ const Header = ({ history }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
 
-  const [teamId, setTeamId] = React.useState('')
+  const [teamId, setTeamId] = React.useState(
+    localStorage.getItem('selectedTeam') || null
+  )
 
   const handleTeamChange = (event) => {
     setTeamId(event.target.value)
+    localStorage.setItem('selectedTeam', event.target.value)
   }
 
   const isMenuOpen = Boolean(anchorEl)
@@ -67,6 +71,9 @@ const Header = ({ history }) => {
 
   const updatedTeam = useSelector((state) => state.updateTeam)
   const { success: updateTeamSuccess } = updatedTeam
+
+  const deletedTeam = useSelector((state) => state.deleteTeam)
+  const { success: deleteTeamSuccess } = deletedTeam
 
   const handleLogout = () => {
     dispatch(logout())
@@ -102,11 +109,35 @@ const Header = ({ history }) => {
     setOpen(false)
   }
 
+  const handleLinkClick = (value) => {
+    history.push(value)
+    handleDrawerClose()
+  }
+
   useEffect(() => {
-    if (!gotUserInfo && userInfo) {
-      dispatch(getUser(userInfo._id))
-    }
-  }, [createTeamSuccess, updateTeamSuccess, dispatch, userInfo, gotUserInfo])
+    dispatch(getUser(userInfo._id))
+    // if (!gotUserInfo && userInfo) {
+    //   // dispatch(getUser(userInfo._id))
+
+    //   // if (!localStorage.getItem('selectedTeam')) {
+    //   //   localStorage.setItem(
+    //   //     'selectedTeam',
+    //   //     userInfo.owner[0]._id ||
+    //   //       userInfo.admin[0]._id ||
+    //   //       userInfo.member[0]._id
+    //   //   )
+
+    //   //   setTeamId(localStorage.getItem('selectedTeam'))
+    //   // }
+    // }
+    setTeamId(localStorage.getItem('selectedTeam') || null)
+  }, [
+    createTeamSuccess,
+    updateTeamSuccess,
+    dispatch,
+    userInfo,
+    deleteTeamSuccess,
+  ])
 
   const menuId = 'primary-search-account-menu'
   const renderMenu = (
@@ -209,26 +240,42 @@ const Header = ({ history }) => {
       <Divider />
       {teamId && (
         <List>
-          <ListItem button onClick={(e) => history.push(`/teams/${teamId}`)}>
+          <ListItem button onClick={(e) => handleLinkClick(`/teams/${teamId}`)}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Team members" />
           </ListItem>
 
-          <ListItem
-            button
-            onClick={(e) => history.push(`/teams/${teamId}/settings`)}
-          >
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Team settings" />
-          </ListItem>
+          {isOwnerOrAdminUser(gotUserInfo, teamId) && (
+            <>
+              <ListItem
+                button
+                onClick={(e) => handleLinkClick(`/teams/${teamId}/settings`)}
+              >
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Team settings" />
+              </ListItem>
+
+              <ListItem
+                button
+                onClick={(e) =>
+                  handleLinkClick(`/teams/${teamId}/settings/feedback`)
+                }
+              >
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Feedback settings" />
+              </ListItem>
+            </>
+          )}
 
           <ListItem
             button
-            onClick={(e) => history.push(`/teams/${teamId}/charts`)}
+            onClick={(e) => handleLinkClick(`/teams/${teamId}/charts`)}
           >
             <ListItemIcon>
               <EqualizerIcon />
@@ -238,26 +285,7 @@ const Header = ({ history }) => {
 
           <ListItem
             button
-            onClick={(e) => history.push(`/teams/${teamId}/feedback`)}
-          >
-            <ListItemIcon>
-              <FeedbackIcon />
-            </ListItemIcon>
-            <ListItemText primary="Team feedback" />
-          </ListItem>
-
-          <ListItem
-            button
-            onClick={(e) => history.push(`/teams/${teamId}/settings/feedback`)}
-          >
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Feedback settings" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={(e) => history.push(`/teams/${teamId}/giveFeedback`)}
+            onClick={(e) => handleLinkClick(`/teams/${teamId}/giveFeedback`)}
           >
             <ListItemIcon>
               <SendIcon />
@@ -271,7 +299,7 @@ const Header = ({ history }) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={(e) => history.push('/createTeam')}
+          onClick={(e) => handleLinkClick('/createTeam')}
         >
           Create new team
         </Button>
@@ -294,7 +322,20 @@ const Header = ({ history }) => {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              <Link to="/">Practice App</Link>
+              <Link to={'/'}>
+                {gotUserInfo &&
+                [
+                  ...gotUserInfo.owner,
+                  ...gotUserInfo.admin,
+                  ...gotUserInfo.member,
+                ].find((team) => team._id === teamId)
+                  ? [
+                      ...gotUserInfo.owner,
+                      ...gotUserInfo.admin,
+                      ...gotUserInfo.member,
+                    ].find((team) => team._id === teamId).name
+                  : 'Select team'}
+              </Link>
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -348,7 +389,7 @@ const Header = ({ history }) => {
           </Toolbar>
         </Container>
       </AppBar>
-      {mainDrawer}
+      {userInfo && mainDrawer}
 
       {renderMobileMenu}
       {renderMenu}

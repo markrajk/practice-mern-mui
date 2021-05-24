@@ -32,15 +32,19 @@ const SearchBox = ({ team, addUser, invitational }) => {
   //const loading = open && options.length === 0
 
   useEffect(() => {
-    console.log(users)
+    // console.log(users)
     if (!users) {
       dispatch(getAllUsers(''))
     } else {
+      console.log(users)
+      console.log(team)
+      team.admins = team.admins || []
+      team.members = team.members || []
       const newArr = users
         .map((user) => {
           if (
             ![team.owner, ...team.admins, ...team.members].find(
-              (member) => member._id === user._id
+              (member) => member && member._id === user._id
             )
           ) {
             return user
@@ -51,7 +55,7 @@ const SearchBox = ({ team, addUser, invitational }) => {
         .filter((filter) => filter)
       console.log(newArr, 'NEW ARR')
       setOptions(newArr)
-      console.log([team.owner, ...team.admins, ...team.members], 'TEAM')
+      // console.log([team.owner, team.admins && ...team.admins, ...team.members], 'TEAM')
       console.log(users, 'USERS')
     }
   }, [dispatch, users, team])

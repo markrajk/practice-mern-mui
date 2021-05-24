@@ -8,8 +8,8 @@ const questionSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['all', 'peers', 'lead', 'self'],
-    default: 'all',
+    enum: ['subordinate', 'peers', 'supervisor', 'self'],
+    default: 'subordinate',
     required: [true, 'Question must have a category'],
   },
   type: {
