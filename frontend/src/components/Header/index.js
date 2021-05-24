@@ -36,6 +36,7 @@ import PeopleIcon from '@material-ui/icons/People'
 import SettingsIcon from '@material-ui/icons/Settings'
 import EqualizerIcon from '@material-ui/icons/Equalizer'
 import FeedbackIcon from '@material-ui/icons/Feedback'
+import SendIcon from '@material-ui/icons/Send'
 import { useTheme } from '@material-ui/core/styles'
 
 import { useStyles } from './styles'
@@ -253,6 +254,15 @@ const Header = ({ history }) => {
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary="Feedback settings" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={(e) => history.push(`/teams/${teamId}/giveFeedback`)}
+          >
+            <ListItemIcon>
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText primary="Give feedback" />
           </ListItem>
         </List>
       )}

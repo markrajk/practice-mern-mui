@@ -44,6 +44,7 @@ import {
   updateQuestionReducer,
   deleteQuestionReducer,
 } from './reducers/questionReducers'
+import { createFeedbackReducer } from './reducers/feedbcakReducers'
 
 const reducer = combineReducers({
   userSignup: userSignupReducer,
@@ -75,6 +76,7 @@ const reducer = combineReducers({
   createQuestion: createQuestionReducer,
   updateQuestion: updateQuestionReducer,
   deleteQuestion: deleteQuestionReducer,
+  createFeedback: createFeedbackReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

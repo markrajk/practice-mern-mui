@@ -53,6 +53,7 @@ export const getAllUsersTeams = (userId) => async (dispatch, getState) => {
 
 export const getTeam = (teamId) => async (dispatch, getState) => {
   try {
+    console.log(teamId)
     dispatch({ type: TEAM_GET_ONE_REQUEST })
 
     const {
