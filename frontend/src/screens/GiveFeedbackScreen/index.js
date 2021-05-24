@@ -145,14 +145,13 @@ const GiveFeedbackScreen = ({ match }) => {
     <>
       <Paper className={classes.root} elevation={3}>
         <div className={classes.header}>
-          <Typography variant="p" className={classes.headerTitle}>
-            Give feedback
-          </Typography>
+          <p className={classes.headerTitle}>Give feedback</p>
         </div>
         <div className={classes.body}>
           {team &&
             [team.owner, ...team.admins, ...team.members].map((member) => (
               <div
+                key={member._id}
                 className={classes.person}
                 onClick={(e) => handleUserSelect(member)}
               >
@@ -162,16 +161,14 @@ const GiveFeedbackScreen = ({ match }) => {
                   alt={member.fullName}
                   src={`/img/users/${member.photoLg}`}
                 />
-                <Typography variant="p" className={classes.personName}>
-                  {member.fullName}
-                </Typography>
-                <Typography variant="p" className={classes.personJobTitle}>
+                <p className={classes.personName}>{member.fullName}</p>
+                <p className={classes.personJobTitle}>
                   {checkMemberRole(member, team) === 1
                     ? 'Member'
                     : checkMemberRole(member, team) === 2
                     ? 'Admin'
                     : 'Owner'}
-                </Typography>
+                </p>
               </div>
             ))}
         </div>
@@ -185,9 +182,7 @@ const GiveFeedbackScreen = ({ match }) => {
         >
           <div className={classes.modal}>
             <div className={classes.modalHeader}>
-              <Typography className={classes.modalHeaderTitle} variant="p">
-                Choose category
-              </Typography>
+              <p className={classes.modalHeaderTitle}>Choose category</p>
             </div>
 
             <div className={classes.categoryModalBody}>
@@ -201,8 +196,7 @@ const GiveFeedbackScreen = ({ match }) => {
                 </Button>
               ) : (
                 <>
-                  {checkMemberRole(selectedUser, team) ===
-                  (
+                  {checkMemberRole(selectedUser, team) === 3 && (
                     <Button
                       color="primary"
                       variant="contained"
@@ -243,9 +237,7 @@ const GiveFeedbackScreen = ({ match }) => {
         >
           <div className={classes.modal}>
             <div className={classes.modalHeader}>
-              <Typography className={classes.modalHeaderTitle} variant="p">
-                Send feedback
-              </Typography>
+              <p className={classes.modalHeaderTitle}>Send feedback</p>
             </div>
 
             <div className={classes.feedbackModalBody}>
@@ -253,6 +245,7 @@ const GiveFeedbackScreen = ({ match }) => {
                 .filter((filter) => filter.category === feedbackCategory)
                 .map((question) => (
                   <Question
+                    key={question._id}
                     question={question}
                     ratingChange={handleRatingChange}
                     answerChange={handleAnswerChange}

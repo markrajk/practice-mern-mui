@@ -22,15 +22,14 @@ const Question = ({ question, ratingChange, answerChange }) => {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.question} variant="p">
-        {question.question}
-      </Typography>
+      <p className={classes.question}>{question.question}</p>
       {question.type === 'rating' && (
         <div className={classes.rating}>
           {[1, 2, 3, 4, 5].map((value) => {
             if (rating >= value) {
               return (
                 <StarIcon
+                  key={value}
                   className={classes.starFilled}
                   onClick={(e) => handleRatingChange(value)}
                 />
@@ -38,6 +37,7 @@ const Question = ({ question, ratingChange, answerChange }) => {
             } else {
               return (
                 <StarIcon
+                  key={value}
                   className={classes.star}
                   onClick={(e) => handleRatingChange(value)}
                 />
