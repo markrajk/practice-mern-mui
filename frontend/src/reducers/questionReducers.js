@@ -5,6 +5,9 @@ import {
   QUESTION_CREATE_REQUEST,
   QUESTION_CREATE_SUCCESS,
   QUESTION_CREATE_FAIL,
+  QUESTION_CREATE_FROM_DEFAULT_REQUEST,
+  QUESTION_CREATE_FROM_DEFAULT_SUCCESS,
+  QUESTION_CREATE_FROM_DEFAULT_FAIL,
   QUESTION_UPDATE_REQUEST,
   QUESTION_UPDATE_SUCCESS,
   QUESTION_UPDATE_FAIL,
@@ -33,6 +36,19 @@ export const createQuestionReducer = (state = {}, action) => {
     case QUESTION_CREATE_SUCCESS:
       return { loading: false, success: true, question: action.payload }
     case QUESTION_CREATE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const createQuestionsFromDefaultReducer = (state = {}, action) => {
+  switch (action.type) {
+    case QUESTION_CREATE_FROM_DEFAULT_REQUEST:
+      return { loading: true }
+    case QUESTION_CREATE_FROM_DEFAULT_SUCCESS:
+      return { loading: false, success: true, questions: action.payload }
+    case QUESTION_CREATE_FROM_DEFAULT_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

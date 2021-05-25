@@ -5,6 +5,7 @@ import {
   updateQuestion,
   deleteQuestion,
   createQuestion,
+  createQuestionFromDefaults,
 } from '../../actions/questionActions'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import {
@@ -33,6 +34,11 @@ const FeedbackSettingsScreen = ({ match }) => {
     question: createQuestionRes,
     success: createSuccess,
   } = createdQuestion
+
+  const createdQuestionFromDefaults = useSelector(
+    (state) => state.createQuestionsFromDefault
+  )
+  const { success: createSuccessFromDefaults } = createdQuestionFromDefaults
 
   const updatedQuestion = useSelector((state) => state.updateQuestion)
   const { question: updateQuestionRes, success } = updatedQuestion
@@ -111,6 +117,10 @@ const FeedbackSettingsScreen = ({ match }) => {
     setNewQuestion(value)
   }
 
+  const handleCreateFromDefaults = () => {
+    dispatch(createQuestionFromDefaults(match.params.id))
+  }
+
   const handleCreateQuestion = (category, type, question) => {
     const obj = {
       category,
@@ -166,7 +176,14 @@ const FeedbackSettingsScreen = ({ match }) => {
         setDeleting(false)
       }
     }
-  }, [dispatch, match, success, deleteSuccess, createSuccess])
+  }, [
+    dispatch,
+    match,
+    success,
+    deleteSuccess,
+    createSuccess,
+    createSuccessFromDefaults,
+  ])
 
   useEffect(() => {
     if (questions && questions.length !== 0) {
@@ -214,6 +231,15 @@ const FeedbackSettingsScreen = ({ match }) => {
               <option value={'self'}>Self</option>
             </Select>
           </FormControl>
+
+          <Button
+            style={{ marginRight: '1em', marginLeft: 'auto' }}
+            color="primary"
+            variant="contained"
+            onClick={handleCreateFromDefaults}
+          >
+            Add From Default Questions
+          </Button>
 
           <Button color="primary" variant="contained" onClick={handleOpen}>
             Add New Question

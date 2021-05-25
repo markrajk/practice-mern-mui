@@ -37,9 +37,9 @@ const Question = ({ question, updateQuestion, deleteQuestion }) => {
 
   return (
     <div className={classes.root}>
-      <Accordion disabled={question.default}>
+      <Accordion>
         <AccordionSummary
-          expandIcon={question.default ? <LockIcon /> : <ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1c-content"
           id="panel1c-header"
         >

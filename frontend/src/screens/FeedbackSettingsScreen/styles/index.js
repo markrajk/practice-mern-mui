@@ -22,7 +22,7 @@ export const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   formControl: {
     margin: theme.spacing(1),

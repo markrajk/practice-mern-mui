@@ -5,15 +5,18 @@ import catchAsync from '../utils/catchAsync.js'
 
 export const getAllQuestions = catchAsync(async (req, res, next) => {
   const questions = await Question.find({ team: req.params.teamId })
-  const defaultQuestions = await DefaultQuestion.find()
+  // const defaultQuestions = await defaultQuestions.find({ team: req.params.teamId })
+  // //const defaultQuestions = await DefaultQuestion.find()
+  // if(!defaultQuestions.length) {
 
-  const allQuestions = [...defaultQuestions, ...questions]
+  // }
+  //const allQuestions = [...defaultQuestions, ...questions]
 
   res.status(200).json({
     status: 'success',
-    results: allQuestions.length,
+    results: questions.length,
     data: {
-      data: allQuestions,
+      data: questions,
     },
   })
 })
@@ -25,6 +28,29 @@ export const createQuestion = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       data: question,
+    },
+  })
+})
+
+export const createQuestionsFromDefault = catchAsync(async (req, res, next) => {
+  const defaultQuestions = await DefaultQuestion.find()
+
+  const sampleQuestions = defaultQuestions.map((question) => {
+    return {
+      team: req.body.team,
+      question: question.question,
+      type: question.type,
+      category: question.category,
+      default: true,
+    }
+  })
+
+  const questions = await Question.insertMany(sampleQuestions)
+
+  res.status(201).send({
+    status: 'success',
+    data: {
+      data: questions,
     },
   })
 })

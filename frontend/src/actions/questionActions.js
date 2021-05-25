@@ -6,6 +6,9 @@ import {
   QUESTION_CREATE_REQUEST,
   QUESTION_CREATE_SUCCESS,
   QUESTION_CREATE_FAIL,
+  QUESTION_CREATE_FROM_DEFAULT_REQUEST,
+  QUESTION_CREATE_FROM_DEFAULT_SUCCESS,
+  QUESTION_CREATE_FROM_DEFAULT_FAIL,
   QUESTION_UPDATE_REQUEST,
   QUESTION_UPDATE_SUCCESS,
   QUESTION_UPDATE_FAIL,
@@ -78,6 +81,45 @@ export const createQuestion = (teamId, question) => async (
   } catch (error) {
     dispatch({
       type: QUESTION_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const createQuestionFromDefaults = (teamId) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({ type: QUESTION_CREATE_FROM_DEFAULT_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `/api/v1/teams/${teamId}/questions/createFromDefault`,
+      config
+    )
+
+    const newQuestions = data.data.data
+
+    dispatch({
+      type: QUESTION_CREATE_FROM_DEFAULT_SUCCESS,
+      payload: newQuestions,
+    })
+  } catch (error) {
+    dispatch({
+      type: QUESTION_CREATE_FROM_DEFAULT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

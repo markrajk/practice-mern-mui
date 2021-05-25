@@ -9,9 +9,19 @@ import {
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  createQuestionsFromDefault,
 } from '../controllers/questionController.js'
 
 const router = express.Router({ mergeParams: true })
+
+router
+  .route('/createFromDefault')
+  .get(
+    protect,
+    setTeamIds,
+    restrictToTeamRoles('owner', 'admin'),
+    createQuestionsFromDefault
+  )
 
 router
   .route('/')

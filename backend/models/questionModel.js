@@ -28,6 +28,10 @@ const questionSchema = new mongoose.Schema({
       ref: 'User',
     },
   ],
+  default: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const Question = new mongoose.model('Question', questionSchema)
