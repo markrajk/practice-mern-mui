@@ -119,6 +119,7 @@ const FeedbackSettingsScreen = ({ match }) => {
     }
     dispatch(createQuestion(match.params.id, obj))
     handleClose()
+    setDeleting(false)
   }
 
   const handleUpdateQuestion = (id, value) => {
@@ -133,6 +134,7 @@ const FeedbackSettingsScreen = ({ match }) => {
       localStorage.setItem(`${category}Questions`, JSON.stringify(arr))
       setQuestionArr(arr)
     }
+    setDeleting(false)
   }
 
   const handleDeleteQuestion = (id) => {
