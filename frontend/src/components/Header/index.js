@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, getUser } from '../../actions/userActions'
 import {} from '../../actions/teamActions'
-import clsx from 'clsx'
+
 import {
   AppBar,
   Toolbar,
@@ -51,6 +51,7 @@ const Header = ({ history }) => {
   const [teamId, setTeamId] = React.useState(
     localStorage.getItem('selectedTeam') || null
   )
+
 
   const handleTeamChange = (event) => {
     setTeamId(event.target.value)

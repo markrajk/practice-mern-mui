@@ -36,6 +36,7 @@ export const getAllQuestions = (teamId) => async (dispatch, getState) => {
     const questions = data.data.data
 
     dispatch({ type: QUESTION_GET_ALL_SUCCESS, payload: questions })
+    // localStorage.setItem('allQuestions', JSON.stringify(questions))
   } catch (error) {
     dispatch({
       type: QUESTION_GET_ALL_FAIL,

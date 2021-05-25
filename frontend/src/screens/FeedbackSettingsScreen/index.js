@@ -6,6 +6,7 @@ import {
   deleteQuestion,
   createQuestion,
 } from '../../actions/questionActions'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import {
   Paper,
   FormControl,
@@ -27,13 +28,21 @@ const FeedbackSettingsScreen = ({ match }) => {
   const { questions } = allQuestions
 
   const createdQuestion = useSelector((state) => state.createQuestion)
-  const { success: createSuccess } = createdQuestion
+  const {
+    error,
+    question: createQuestionRes,
+    success: createSuccess,
+  } = createdQuestion
 
   const updatedQuestion = useSelector((state) => state.updateQuestion)
-  const { success } = updatedQuestion
+  const { question: updateQuestionRes, success } = updatedQuestion
 
   const deletedQuestion = useSelector((state) => state.deleteQuestion)
-  const { success: deleteSuccess } = deletedQuestion
+  const {
+    loading,
+    question: deleteQuestionRes,
+    success: deleteSuccess,
+  } = deletedQuestion
 
   const [category, setCategory] = useState(
     localStorage.getItem('questionCategory') || 'subordinate'
@@ -42,6 +51,37 @@ const FeedbackSettingsScreen = ({ match }) => {
   const [newType, setNewType] = useState('text')
   const [newQuestion, setNewQuestion] = useState('')
   const [open, setOpen] = React.useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  const [questionArr, setQuestionArr] = useState([])
+
+  const reorder = (list, startIndex, endIndex) => {
+    const result = [...list]
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+
+    return result
+  }
+
+  function onDragEnd(result) {
+    if (!result.destination) {
+      return
+    }
+
+    if (result.destination.index === result.source.index) {
+      return
+    }
+
+    const questionsArr = reorder(
+      questionArr,
+      result.source.index,
+      result.destination.index
+    ).filter((filter) => filter.category === category)
+
+    localStorage.setItem(`${category}Questions`, JSON.stringify(questionsArr))
+    // setQuestionArr(localStorage.getItem(`${category}Questions`))
+    setQuestionArr(questionsArr)
+  }
 
   const handleOpen = () => {
     setOpen(true)
@@ -49,7 +89,7 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   const handleClose = () => {
     setOpen(false)
-    // setNewCategory('all')
+    // setNewCategory('subordinate')
     // setNewType('text')
     setNewQuestion('')
   }
@@ -83,17 +123,57 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   const handleUpdateQuestion = (id, value) => {
     dispatch(updateQuestion(match.params.id, id, { question: value }))
+    let arr = JSON.parse(localStorage.getItem(`${category}Questions`))
+    if (arr) {
+      arr.forEach((e) => {
+        if (e._id === id) {
+          e.question = value
+        }
+      })
+      localStorage.setItem(`${category}Questions`, JSON.stringify(arr))
+      setQuestionArr(arr)
+    }
   }
 
   const handleDeleteQuestion = (id) => {
+    setDeleting(true)
     dispatch(deleteQuestion(match.params.id, id))
+    let arr = JSON.parse(localStorage.getItem(`${category}Questions`))
+    if (arr) {
+      arr = arr.filter((filter) => filter._id !== id)
+      localStorage.setItem(`${category}Questions`, JSON.stringify(arr))
+      setQuestionArr(arr)
+    }
   }
 
   useEffect(() => {
     dispatch(getAllQuestions(match.params.id))
-    // setNewQuestion(localStorage.getItem('questionCategory'))
-    console.log(category)
+    if (createSuccess && !deleting) {
+      let arr = JSON.parse(
+        localStorage.getItem(`${createQuestionRes.category}Questions`)
+      )
+
+      if (arr) {
+        arr.push(createQuestionRes)
+        localStorage.setItem(
+          `${createQuestionRes.category}Questions`,
+          JSON.stringify(arr)
+        )
+        setQuestionArr(arr)
+
+        setDeleting(false)
+      }
+    }
   }, [dispatch, match, success, deleteSuccess, createSuccess])
+
+  useEffect(() => {
+    if (questions.length !== 0) {
+      setQuestionArr(
+        JSON.parse(localStorage.getItem(`${category}Questions`)) ||
+          questions.filter((filter) => filter.category === category)
+      )
+    }
+  }, [questions, category])
 
   return (
     <Paper className={classes.root} elevation={3}>
@@ -126,16 +206,39 @@ const FeedbackSettingsScreen = ({ match }) => {
         </div>
       </div>
       <div className={classes.body}>
-        {questions &&
-          questions
-            .filter((filter) => filter.category === category)
-            .map((question) => (
-              <Question
-                updateQuestion={handleUpdateQuestion}
-                deleteQuestion={handleDeleteQuestion}
-                question={question}
-              />
-            ))}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="list">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                {questionArr.length !== 0 &&
+                  questionArr
+                    .filter((filter) => filter.category === category)
+                    .map((question, index) => (
+                      <Draggable
+                        draggableId={question._id}
+                        index={index}
+                        key={question._id}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <Question
+                              updateQuestion={handleUpdateQuestion}
+                              deleteQuestion={handleDeleteQuestion}
+                              question={question}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
       <Modal
         open={open}
