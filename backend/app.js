@@ -13,6 +13,7 @@ import teamRoutes from './routes/teamRoutes.js'
 import invitationRoutes from './routes/invitationRoutes.js'
 import chartRoutes from './routes/chartRoutes.js'
 import feedbackRoutes from './routes/feedbackRoutes.js'
+import defaultQuestionRoutes from './routes/defaultQuestionRoutes.js'
 
 const app = express()
 
@@ -46,6 +47,7 @@ app.use('/api/v1/teams/', teamRoutes)
 app.use('/api/v1/invitations/', invitationRoutes)
 app.use('/api/v1/charts/', chartRoutes)
 app.use('/api/v1/feedbacks/', feedbackRoutes)
+app.use('/api/v1/defaultQuestions/', defaultQuestionRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve()

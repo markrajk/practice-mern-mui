@@ -11,6 +11,7 @@ import Divider from '@material-ui/core/Divider'
 import { useStyles } from './styles'
 import StarIcon from '@material-ui/icons/Star'
 import SubjectIcon from '@material-ui/icons/Subject'
+import LockIcon from '@material-ui/icons/Lock'
 import PropTypes from 'prop-types'
 
 const Question = ({ question, updateQuestion, deleteQuestion }) => {
@@ -36,9 +37,9 @@ const Question = ({ question, updateQuestion, deleteQuestion }) => {
 
   return (
     <div className={classes.root}>
-      <Accordion>
+      <Accordion disabled={question.default}>
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={question.default ? <LockIcon /> : <ExpandMoreIcon />}
           aria-controls="panel1c-content"
           id="panel1c-header"
         >

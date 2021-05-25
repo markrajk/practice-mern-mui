@@ -169,7 +169,20 @@ const FeedbackSettingsScreen = ({ match }) => {
   }, [dispatch, match, success, deleteSuccess, createSuccess])
 
   useEffect(() => {
-    if (questions.length !== 0) {
+    if (questions && questions.length !== 0) {
+      if (
+        localStorage.getItem(`${category}Questions`) &&
+        questions.filter((filter) => filter.category === category).length !==
+          JSON.parse(localStorage.getItem(`${category}Questions`)).length
+      ) {
+        localStorage.setItem(
+          `${category}Questions`,
+          JSON.stringify(
+            questions.filter((filter) => filter.category === category)
+          )
+        )
+      }
+
       setQuestionArr(
         JSON.parse(localStorage.getItem(`${category}Questions`)) ||
           questions.filter((filter) => filter.category === category)

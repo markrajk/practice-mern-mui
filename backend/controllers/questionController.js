@@ -1,15 +1,19 @@
 import Question from '../models/questionModel.js'
+import DefaultQuestion from '../models/defaultQuestionModel.js'
 import AppError from '../utils/appError.js'
 import catchAsync from '../utils/catchAsync.js'
 
 export const getAllQuestions = catchAsync(async (req, res, next) => {
   const questions = await Question.find({ team: req.params.teamId })
+  const defaultQuestions = await DefaultQuestion.find()
+
+  const allQuestions = [...defaultQuestions, ...questions]
 
   res.status(200).json({
     status: 'success',
-    results: questions.length,
+    results: allQuestions.length,
     data: {
-      data: questions,
+      data: allQuestions,
     },
   })
 })
