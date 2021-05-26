@@ -303,6 +303,26 @@ const Header = ({ history }) => {
           </ListItem>
         </List>
       )}
+      {gotUserInfo && gotUserInfo.role === 'admin' && (
+        <>
+          <Divider />
+          <ListItem button onClick={(e) => handleLinkClick(`/admins/users`)}>
+            <ListItemIcon>
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage users" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={(e) => handleLinkClick(`/admins/questions`)}
+          >
+            <ListItemIcon>
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage questions" />
+          </ListItem>
+        </>
+      )}
       <Divider />
       <div className={classes.drawerFooter}>
         <Button

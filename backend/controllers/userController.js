@@ -3,7 +3,12 @@ import multer from 'multer'
 import sharp from 'sharp'
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
-import { getOne, updateOne, getAll } from '../utils/handlerFactory.js'
+import {
+  getOne,
+  updateOne,
+  getAll,
+  deleteOne,
+} from '../utils/handlerFactory.js'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 const __filename = fileURLToPath(import.meta.url)
@@ -152,3 +157,4 @@ export const getUser = getOne(User, [
   },
 ])
 export const updateUser = updateOne(User)
+export const deleteUser = deleteOne(User)

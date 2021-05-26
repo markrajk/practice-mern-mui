@@ -47,6 +47,15 @@ import {
   createQuestionsFromDefaultReducer,
 } from './reducers/questionReducers'
 import { createFeedbackReducer } from './reducers/feedbcakReducers'
+import {
+  adminGetAllUsersReducer,
+  adminUpdateUserReducer,
+  adminDeleteUserReducer,
+  adminGetAllQuestionsReducer,
+  adminUpdateQuestionReducer,
+  adminCreateQuestionReducer,
+  adminDeleteQuestionReducer,
+} from './reducers/adminReducers'
 
 const reducer = combineReducers({
   clearDB: clearDBReducer,
@@ -81,6 +90,13 @@ const reducer = combineReducers({
   deleteQuestion: deleteQuestionReducer,
   createFeedback: createFeedbackReducer,
   createQuestionsFromDefault: createQuestionsFromDefaultReducer,
+  adminGetAllUsers: adminGetAllUsersReducer,
+  adminUpdateUser: adminUpdateUserReducer,
+  adminDeleteUser: adminDeleteUserReducer,
+  adminGetAllQuestions: adminGetAllQuestionsReducer,
+  adminUpdateQuestion: adminUpdateQuestionReducer,
+  adminCreateQuestion: adminCreateQuestionReducer,
+  adminDeleteQuestion: adminDeleteQuestionReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

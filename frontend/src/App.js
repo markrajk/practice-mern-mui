@@ -12,6 +12,8 @@ import TeamChartsScreen from './screens/TeamChartsScreen'
 import TeamFeedbackScreen from './screens/TeamFeedbackScreen'
 import FeedbackSettingsScreen from './screens/FeedbackSettingsScreen'
 import GiveFeedbackScreen from './screens/GiveFeedbackScreen'
+import AdminUsersScreen from './screens/AdminUsersScreen'
+import AdminQuestionsScreen from './screens/AdminQuestionsScreen'
 
 const App = () => {
   return (
@@ -52,6 +54,12 @@ const App = () => {
           exact
           path="/teams/:id/feedback"
           component={TeamFeedbackScreen}
+        />
+        <Route exact path="/admins/users" component={AdminUsersScreen} />
+        <Route
+          exact
+          path="/admins/questions"
+          component={AdminQuestionsScreen}
         />
       </Main>
     </Router>

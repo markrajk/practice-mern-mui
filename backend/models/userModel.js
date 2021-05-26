@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'default.jpeg',
     },
+    role: {
+      type: String,
+      default: 'user',
+      enum: ['user', 'admin'],
+    },
   },
   {
     toJSON: { virtuals: true },
