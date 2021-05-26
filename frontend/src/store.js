@@ -8,6 +8,7 @@ import {
   getUserReducer,
   getAllUserReducer,
   updateUserReducer,
+  clearDBReducer,
 } from './reducers/userReducers'
 import {
   postListReducer,
@@ -48,6 +49,7 @@ import {
 import { createFeedbackReducer } from './reducers/feedbcakReducers'
 
 const reducer = combineReducers({
+  clearDB: clearDBReducer,
   userSignup: userSignupReducer,
   userLogin: userLoginReducer,
   updateMe: updateMeReducer,

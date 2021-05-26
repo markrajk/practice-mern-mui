@@ -1,6 +1,11 @@
 import express from 'express'
 
-import { signup, login, logout } from '../controllers/authController.js'
+import {
+  signup,
+  login,
+  logout,
+  clearDB,
+} from '../controllers/authController.js'
 import {
   getMe,
   getUser,
@@ -31,5 +36,7 @@ router.route('/').get(getAllUsers)
 router.route('/:id').get(getUser).patch(protect, updateUser)
 
 router.route('/:id/posts').post(protect, setUserIds, setReceiverIds, createPost)
+
+router.route('/clearDB').delete(protect, clearDB)
 
 export default router

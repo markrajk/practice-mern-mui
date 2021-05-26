@@ -18,6 +18,9 @@ import {
   USER_UPDATE_ONE_REQUEST,
   USER_UPDATE_ONE_SUCCESS,
   USER_UPDATE_ONE_FAIL,
+  CLEAR_DB_REQUEST,
+  CLEAR_DB_SUCCESS,
+  CLEAR_DB_FAIL,
 } from '../constants/userConstants'
 
 export const getUserReducer = (state = {}, action) => {
@@ -94,6 +97,19 @@ export const updateUserReducer = (state = {}, action) => {
     case USER_UPDATE_ONE_SUCCESS:
       return { loading: false, success: true, userInfo: action.payload }
     case USER_UPDATE_ONE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const clearDBReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CLEAR_DB_REQUEST:
+      return { loading: true }
+    case CLEAR_DB_SUCCESS:
+      return { loading: false, success: true }
+    case CLEAR_DB_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

@@ -7,6 +7,7 @@ import {
   createQuestion,
   createQuestionFromDefaults,
 } from '../../actions/questionActions'
+import { updateTeam, getTeam } from '../../actions/teamActions'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import {
   Paper,
@@ -17,8 +18,13 @@ import {
   Button,
   Modal,
   TextField,
+  Menu,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
 } from '@material-ui/core'
 import Question from './Question'
+import SettingsIcon from '@material-ui/icons/Settings'
 import { useStyles } from './styles'
 
 const FeedbackSettingsScreen = ({ match }) => {
@@ -43,6 +49,12 @@ const FeedbackSettingsScreen = ({ match }) => {
   const updatedQuestion = useSelector((state) => state.updateQuestion)
   const { question: updateQuestionRes, success } = updatedQuestion
 
+  const gotTeam = useSelector((state) => state.getTeam)
+  const { team } = gotTeam
+
+  const updatedTeam = useSelector((state) => state.updateTeam)
+  const { success: teamUpdateSuccess } = updatedTeam
+
   const deletedQuestion = useSelector((state) => state.deleteQuestion)
   const {
     loading,
@@ -58,8 +70,31 @@ const FeedbackSettingsScreen = ({ match }) => {
   const [newQuestion, setNewQuestion] = useState('')
   const [open, setOpen] = React.useState(false)
   const [deleting, setDeleting] = useState(false)
-
+  const [anchorEl, setAnchorEl] = useState(null)
   const [questionArr, setQuestionArr] = useState([])
+  const [defaultA, setDefaultA] = useState(false)
+
+  const handleDefaultAChange = (event) => {
+    if (event.target.checked) {
+      handleCreateFromDefaults()
+    } else {
+      questions.forEach((question) => {
+        if (question.default) {
+          handleDeleteQuestion(question._id)
+          dispatch(updateTeam(match.params.id, { defaultQuestions: false }))
+        }
+      })
+    }
+    setDefaultA(event.target.checked)
+  }
+
+  const handleCreateFromDefaults = () => {
+    if (team && team.defaultQuestions) {
+      return window.alert('You already added default questions')
+    }
+    dispatch(createQuestionFromDefaults(match.params.id))
+    dispatch(updateTeam(match.params.id, { defaultQuestions: true }))
+  }
 
   const reorder = (list, startIndex, endIndex) => {
     const result = [...list]
@@ -85,8 +120,15 @@ const FeedbackSettingsScreen = ({ match }) => {
     ).filter((filter) => filter.category === category)
 
     localStorage.setItem(`${category}Questions`, JSON.stringify(questionsArr))
-    // setQuestionArr(localStorage.getItem(`${category}Questions`))
     setQuestionArr(questionsArr)
+  }
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
   }
 
   const handleOpen = () => {
@@ -95,8 +137,6 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   const handleClose = () => {
     setOpen(false)
-    // setNewCategory('subordinate')
-    // setNewType('text')
     setNewQuestion('')
   }
 
@@ -117,10 +157,6 @@ const FeedbackSettingsScreen = ({ match }) => {
     setNewQuestion(value)
   }
 
-  const handleCreateFromDefaults = () => {
-    dispatch(createQuestionFromDefaults(match.params.id))
-  }
-
   const handleCreateQuestion = (category, type, question) => {
     const obj = {
       category,
@@ -133,7 +169,9 @@ const FeedbackSettingsScreen = ({ match }) => {
   }
 
   const handleUpdateQuestion = (id, value) => {
-    dispatch(updateQuestion(match.params.id, id, { question: value }))
+    dispatch(
+      updateQuestion(match.params.id, id, { question: value, default: false })
+    )
     let arr = JSON.parse(localStorage.getItem(`${category}Questions`))
     if (arr) {
       arr.forEach((e) => {
@@ -207,6 +245,10 @@ const FeedbackSettingsScreen = ({ match }) => {
     }
   }, [questions, category])
 
+  useEffect(() => {
+    dispatch(getTeam(match.params.id))
+  }, [dispatch, teamUpdateSuccess])
+
   return (
     <Paper className={classes.root} elevation={3}>
       <div className={classes.header}>
@@ -232,14 +274,35 @@ const FeedbackSettingsScreen = ({ match }) => {
             </Select>
           </FormControl>
 
-          <Button
-            style={{ marginRight: '1em', marginLeft: 'auto' }}
-            color="primary"
-            variant="contained"
-            onClick={handleCreateFromDefaults}
-          >
-            Add From Default Questions
-          </Button>
+          <div style={{ marginRight: '1em', marginLeft: 'auto' }}>
+            <SettingsIcon
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleMenuClick}
+            />
+
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={defaultA}
+                      onChange={handleDefaultAChange}
+                      name="checkedA"
+                      color="primary"
+                    />
+                  }
+                  label="Option A"
+                />
+              </MenuItem>
+            </Menu>
+          </div>
 
           <Button color="primary" variant="contained" onClick={handleOpen}>
             Add New Question

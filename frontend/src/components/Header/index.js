@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, getUser } from '../../actions/userActions'
+import { logout, getUser, clearDB } from '../../actions/userActions'
 import {} from '../../actions/teamActions'
 
 import {
@@ -52,7 +52,6 @@ const Header = ({ history }) => {
     localStorage.getItem('selectedTeam') || null
   )
 
-
   const handleTeamChange = (event) => {
     setTeamId(event.target.value)
     localStorage.setItem('selectedTeam', event.target.value)
@@ -75,6 +74,12 @@ const Header = ({ history }) => {
 
   const deletedTeam = useSelector((state) => state.deleteTeam)
   const { success: deleteTeamSuccess } = deletedTeam
+
+  const handleClearDB = () => {
+    dispatch(clearDB())
+    handleMenuClose()
+    history.push('/')
+  }
 
   const handleLogout = () => {
     dispatch(logout())
@@ -160,6 +165,7 @@ const Header = ({ history }) => {
         Profile
       </MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      <MenuItem onClick={handleClearDB}>Clear Database</MenuItem>
     </Menu>
   )
 

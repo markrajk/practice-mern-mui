@@ -19,6 +19,9 @@ import {
   USER_UPDATE_ONE_REQUEST,
   USER_UPDATE_ONE_SUCCESS,
   USER_UPDATE_ONE_FAIL,
+  CLEAR_DB_REQUEST,
+  CLEAR_DB_SUCCESS,
+  CLEAR_DB_FAIL,
 } from '../constants/userConstants'
 
 export const getUser = (id) => async (dispatch) => {
@@ -275,6 +278,38 @@ export const updateUser = (userId, user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_ONE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const clearDB = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CLEAR_DB_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.delete('/api/v1/users/clearDB', config)
+
+    dispatch({
+      type: CLEAR_DB_SUCCESS,
+    })
+  } catch (error) {
+    dispatch({
+      type: CLEAR_DB_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

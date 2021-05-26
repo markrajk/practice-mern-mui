@@ -5,6 +5,10 @@ import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import Email from '../utils/email.js'
 
+import Question from '../models/questionModel.js'
+import Team from '../models/teamModel.js'
+import Feedback from '../models/feedbackModel.js'
+
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -108,3 +112,14 @@ export const logout = (req, res) => {
     status: 'success',
   })
 }
+
+export const clearDB = catchAsync(async (req, res, next) => {
+  await Question.deleteMany()
+  await Feedback.deleteMany()
+  await Team.deleteMany()
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  })
+})
