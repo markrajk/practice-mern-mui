@@ -303,6 +303,16 @@ const Header = ({ history }) => {
           </ListItem>
         </List>
       )}
+      <Divider />
+      <ListItem
+        button
+        onClick={(e) => handleLinkClick(`/users/${userInfo._id}/settings`)}
+      >
+        <ListItemIcon>
+          <SendIcon />
+        </ListItemIcon>
+        <ListItemText primary="User settings" />
+      </ListItem>
       {gotUserInfo && gotUserInfo.role === 'admin' && (
         <>
           <Divider />

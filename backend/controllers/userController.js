@@ -90,6 +90,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
     'firstName',
     'lastName',
     'email',
+    'jobTitle',
     'photo'
   )
   if (req.file) filteredBody.photoLg = req.file.filename

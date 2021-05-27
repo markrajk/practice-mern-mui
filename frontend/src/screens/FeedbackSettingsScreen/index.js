@@ -69,7 +69,7 @@ const FeedbackSettingsScreen = ({ match }) => {
   const [newType, setNewType] = useState('text')
   const [newQuestion, setNewQuestion] = useState('')
   const [open, setOpen] = React.useState(false)
-  const [deleting, setDeleting] = useState(false)
+
   const [anchorEl, setAnchorEl] = useState(null)
   const [questionArr, setQuestionArr] = useState([])
   const [defaultA, setDefaultA] = useState(false)
@@ -119,7 +119,16 @@ const FeedbackSettingsScreen = ({ match }) => {
       result.destination.index
     ).filter((filter) => filter.category === category)
 
-    localStorage.setItem(`${category}Questions`, JSON.stringify(questionsArr))
+    console.log(questionsArr)
+
+    questionsArr.forEach((e, i) => {
+      dispatch(
+        updateQuestion(match.params.id, e._id, {
+          order: i,
+        })
+      )
+    })
+
     setQuestionArr(questionsArr)
   }
 
@@ -142,7 +151,6 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value)
-    localStorage.setItem('questionCategory', event.target.value)
   }
 
   const handleNewCategoryChange = (event) => {
@@ -165,55 +173,20 @@ const FeedbackSettingsScreen = ({ match }) => {
     }
     dispatch(createQuestion(match.params.id, obj))
     handleClose()
-    setDeleting(false)
   }
 
   const handleUpdateQuestion = (id, value) => {
     dispatch(
       updateQuestion(match.params.id, id, { question: value, default: false })
     )
-    let arr = JSON.parse(localStorage.getItem(`${category}Questions`))
-    if (arr) {
-      arr.forEach((e) => {
-        if (e._id === id) {
-          e.question = value
-        }
-      })
-      localStorage.setItem(`${category}Questions`, JSON.stringify(arr))
-      setQuestionArr(arr)
-    }
-    setDeleting(false)
   }
 
   const handleDeleteQuestion = (id) => {
-    setDeleting(true)
     dispatch(deleteQuestion(match.params.id, id))
-    let arr = JSON.parse(localStorage.getItem(`${category}Questions`))
-    if (arr) {
-      arr = arr.filter((filter) => filter._id !== id)
-      localStorage.setItem(`${category}Questions`, JSON.stringify(arr))
-      setQuestionArr(arr)
-    }
   }
 
   useEffect(() => {
     dispatch(getAllQuestions(match.params.id))
-    if (createSuccess && !deleting) {
-      let arr = JSON.parse(
-        localStorage.getItem(`${createQuestionRes.category}Questions`)
-      )
-
-      if (arr) {
-        arr.push(createQuestionRes)
-        localStorage.setItem(
-          `${createQuestionRes.category}Questions`,
-          JSON.stringify(arr)
-        )
-        setQuestionArr(arr)
-
-        setDeleting(false)
-      }
-    }
   }, [
     dispatch,
     match,
@@ -225,23 +198,12 @@ const FeedbackSettingsScreen = ({ match }) => {
 
   useEffect(() => {
     if (questions && questions.length !== 0) {
-      if (
-        localStorage.getItem(`${category}Questions`) &&
-        questions.filter((filter) => filter.category === category).length !==
-          JSON.parse(localStorage.getItem(`${category}Questions`)).length
-      ) {
-        localStorage.setItem(
-          `${category}Questions`,
-          JSON.stringify(
-            questions.filter((filter) => filter.category === category)
-          )
-        )
-      }
+      let arr = questions.filter((filter) => filter.category === category)
 
-      setQuestionArr(
-        JSON.parse(localStorage.getItem(`${category}Questions`)) ||
-          questions.filter((filter) => filter.category === category)
-      )
+      arr.forEach((e, i) => {
+        if (!e.order && e.order !== 0) e.order = i
+      })
+      setQuestionArr(arr.sort((a, b) => a.order - b.order))
     }
   }, [questions, category])
 

@@ -5,7 +5,7 @@ import Main from './components/Main'
 import Header from './components/Header'
 import CreateTeamScreen from './screens/CreateTeam'
 import HomeScreen from './screens/HomeScreen'
-import ProfileScreen from './screens/ProfileScreen'
+import UserSettingsScreen from './screens/UserSettingsScreen'
 import TeamScreen from './screens/TeamScreen'
 import TeamSettingsScreen from './screens/TeamSettingsScreen'
 import TeamChartsScreen from './screens/TeamChartsScreen'
@@ -32,7 +32,11 @@ const App = () => {
           render={(props) => <AuthCard {...props} cardType="signup" />}
         />
         <Route exact path="/createTeam" component={CreateTeamScreen} />
-        <Route exact path="/users/:id" component={ProfileScreen} />
+        <Route
+          exact
+          path="/users/:id/settings"
+          component={UserSettingsScreen}
+        />
         <Route exact path="/teams/:id" component={TeamScreen} />
         <Route
           exact

@@ -252,6 +252,7 @@ const GiveFeedbackScreen = ({ match }) => {
             <div className={classes.feedbackModalBody}>
               {questions
                 .filter((filter) => filter.category === feedbackCategory)
+                .sort((a, b) => a.order - b.order)
                 .map((question) => (
                   <Question
                     key={question._id}

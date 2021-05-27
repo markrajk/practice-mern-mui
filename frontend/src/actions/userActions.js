@@ -203,6 +203,7 @@ export const updateMe = (user) => async (dispatch, getState) => {
     formData.append('firstName', user.firstName)
     formData.append('lastName', user.lastName)
     formData.append('email', user.email)
+    formData.append('jobTitle', user.jobTitle)
     formData.append('photo', user.photo)
 
     const config = {

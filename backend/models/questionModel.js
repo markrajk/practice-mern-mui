@@ -28,6 +28,7 @@ const questionSchema = new mongoose.Schema({
       ref: 'User',
     },
   ],
+  order: Number,
   default: {
     type: Boolean,
     default: false,
