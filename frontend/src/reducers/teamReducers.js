@@ -2,6 +2,9 @@ import {
   TEAM_CREATE_REQUEST,
   TEAM_CREATE_SUCCESS,
   TEAM_CREATE_FAIL,
+  TEAM_DEMO_CREATE_REQUEST,
+  TEAM_DEMO_CREATE_SUCCESS,
+  TEAM_DEMO_CREATE_FAIL,
   TEAM_GET_ALL_REQUEST,
   TEAM_GET_ALL_SUCCESS,
   TEAM_GET_ALL_FAIL,
@@ -52,6 +55,19 @@ export const createTeamReducer = (state = {}, action) => {
     case TEAM_CREATE_SUCCESS:
       return { loading: false, success: true, team: action.payload }
     case TEAM_CREATE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const createDemoTeamReducer = (state = {}, action) => {
+  switch (action.type) {
+    case TEAM_DEMO_CREATE_REQUEST:
+      return { loading: true }
+    case TEAM_DEMO_CREATE_SUCCESS:
+      return { loading: false, success: true, team: action.payload }
+    case TEAM_DEMO_CREATE_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

@@ -3,6 +3,9 @@ import {
   TEAM_CREATE_REQUEST,
   TEAM_CREATE_SUCCESS,
   TEAM_CREATE_FAIL,
+  TEAM_DEMO_CREATE_REQUEST,
+  TEAM_DEMO_CREATE_SUCCESS,
+  TEAM_DEMO_CREATE_FAIL,
   TEAM_GET_ALL_REQUEST,
   TEAM_GET_ALL_SUCCESS,
   TEAM_GET_ALL_FAIL,
@@ -106,6 +109,41 @@ export const createTeam = (team) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: TEAM_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const createDemoTeam = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: TEAM_DEMO_CREATE_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.post(
+      `/api/v1/teams/createDemoTeam`,
+      {},
+      config
+    )
+
+    const newTeam = data.data.data
+
+    dispatch({ type: TEAM_DEMO_CREATE_SUCCESS, payload: newTeam })
+  } catch (error) {
+    dispatch({
+      type: TEAM_DEMO_CREATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

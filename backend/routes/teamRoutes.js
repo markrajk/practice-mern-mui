@@ -14,6 +14,7 @@ import {
   updateTeam,
   deleteTeam,
   joinTeam,
+  createDemoTeam,
 } from '../controllers/teamController.js'
 import { createInvitation } from '../controllers/invitationController.js'
 
@@ -24,6 +25,8 @@ const router = express.Router()
 router.use('/:teamId/questions', questionRouter)
 
 router.use(protect)
+
+router.route('/createDemoTeam').post(setOwnerIds, createDemoTeam)
 
 router.route('/').get(getAllTeams).post(setOwnerIds, createTeam)
 

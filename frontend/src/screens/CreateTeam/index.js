@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createTeam } from '../../actions/teamActions'
+import { createTeam, createDemoTeam } from '../../actions/teamActions'
 
 import SearchBox from '../../components/SearchBox'
 import { useStyles } from './styles'
@@ -17,6 +17,9 @@ import {
 const CreateTeamScreen = ({ history }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+
+  const createdDemoTeam = useSelector((state) => state.createDemoTeam)
+  const { team: demoTeamCreated, success: demoTeamSuccess } = createdDemoTeam
 
   const createdTeam = useSelector((state) => state.createTeam)
   const { team: teamCreated, success } = createdTeam
@@ -42,6 +45,10 @@ const CreateTeamScreen = ({ history }) => {
     setTeam({ ...team, members: updatedArr })
   }
 
+  const handleDemoTeamCreate = async () => {
+    dispatch(createDemoTeam())
+  }
+
   const handleTeamCreate = async (team) => {
     if (!team.name) return alert('Team must have name')
 
@@ -60,9 +67,24 @@ const CreateTeamScreen = ({ history }) => {
     }
   }, [success, history, team, teamCreated])
 
+  useEffect(() => {
+    if (demoTeamSuccess && demoTeamCreated) {
+      history.push(`/teams/${demoTeamCreated._id}`)
+    }
+  }, [demoTeamSuccess, history, demoTeamCreated])
+
   return (
     <Card className={classes.card} variant="outlined">
-      <Typography variant="h4">Create new team</Typography>
+      <div className={classes.cardHeader}>
+        <Typography variant="h4">Create new team</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleDemoTeamCreate}
+        >
+          Create Demo
+        </Button>
+      </div>
       <TextField
         type="text"
         id="filled-full-width"

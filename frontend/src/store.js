@@ -24,6 +24,7 @@ import {
 } from './reducers/commentReducers'
 import {
   createTeamReducer,
+  createDemoTeamReducer,
   getTeamReducer,
   updateTeamReducer,
   deleteTeamReducer,
@@ -75,6 +76,7 @@ const reducer = combineReducers({
   deleteComment: deleteCommentReducer,
   getTeam: getTeamReducer,
   createTeam: createTeamReducer,
+  createDemoTeam: createDemoTeamReducer,
   updateTeam: updateTeamReducer,
   deleteTeam: deleteTeamReducer,
   createInvitation: createInvitationReducer,

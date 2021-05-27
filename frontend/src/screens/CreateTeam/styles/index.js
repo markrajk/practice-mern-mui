@@ -186,6 +186,12 @@ export const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(2),
     },
   },
+  cardHeader: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   // chip: {
   //   fontSize: '1.5em',
   // },
