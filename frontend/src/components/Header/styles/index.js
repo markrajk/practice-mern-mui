@@ -2,7 +2,7 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -117,6 +117,10 @@ export const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+  },
+  toolbar: {
+    width: '100%',
+    justifyContent: 'flex-start',
   },
   // menuButton: {
   //   marginRight: 36,

@@ -373,7 +373,10 @@ const Header = ({
         className={classes.appBar}
       >
         <Container maxWidth="xl">
-          <Toolbar>
+          <Toolbar
+            style={{ justifyContent: 'flex-start' }}
+            className={classes.toolbar}
+          >
             {userInfo && (
               <>
                 <IconButton
@@ -402,7 +405,7 @@ const Header = ({
                       : 'Select team'}
                   </Link>
                 </Typography>
-                <div className={classes.search}>
+                <div style={{ marginRight: 'auto' }} className={classes.search}>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
                   </div>
@@ -415,7 +418,7 @@ const Header = ({
                     inputProps={{ 'aria-label': 'search' }}
                   />
                 </div>
-                <div className={classes.grow} />
+                {/* <div className={classes.grow} /> */}
                 {userInfo && (
                   <>
                     <div className={classes.sectionDesktop}>
