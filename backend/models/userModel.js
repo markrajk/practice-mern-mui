@@ -39,6 +39,13 @@ const userSchema = new mongoose.Schema(
       default: 'user',
       enum: ['user', 'admin'],
     },
+    settings: {
+      theme: {
+        type: String,
+        default: 'blue',
+        enum: ['blue', 'green'],
+      },
+    },
   },
   {
     toJSON: { virtuals: true },

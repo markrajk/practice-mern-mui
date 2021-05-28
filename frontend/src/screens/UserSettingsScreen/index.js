@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateUser, getUser, updateMe } from '../../actions/userActions'
+import {
+  updateUser,
+  getUser,
+  updateMe,
+  updateUserSettings,
+} from '../../actions/userActions'
 import {
   Paper,
   Typography,
@@ -141,6 +146,16 @@ const UserSettingsScreen = ({ match }) => {
   // const saveNameHandler = () => {}
 
   // const saveJobTitleHandler = () => {}
+
+  const handleColorThemeUpdate = (value) => {
+    dispatch(
+      updateUserSettings(match.params.id, {
+        settings: {
+          theme: value,
+        },
+      })
+    )
+  }
 
   useEffect(() => {
     dispatch(getUser(match.params.id))
@@ -343,6 +358,44 @@ const UserSettingsScreen = ({ match }) => {
                           Save
                         </Button>
                       )}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow
+                    className={classes.tableRow}
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                  >
+                    <TableCell
+                      className={classes.tableCell}
+                      style={{ minWidth: '170px' }}
+                    >
+                      <p className={classes.cellTitle}>
+                        Here you can change color theme
+                      </p>
+                    </TableCell>
+
+                    <TableCell
+                      className={classes.tableCell}
+                      style={{ minWidth: '170px' }}
+                      align="right"
+                      colSpan={2}
+                    >
+                      <Button
+                        color="danger"
+                        variant="contained"
+                        onClick={(e) => handleColorThemeUpdate('green')}
+                      >
+                        Green
+                      </Button>
+                      <Button
+                        color="danger"
+                        variant="contained"
+                        onClick={(e) => handleColorThemeUpdate('blue')}
+                      >
+                        Blue
+                      </Button>
                     </TableCell>
                   </TableRow>
                 </TableBody>

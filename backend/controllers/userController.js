@@ -159,3 +159,21 @@ export const getUser = getOne(User, [
 ])
 export const updateUser = updateOne(User)
 export const deleteUser = deleteOne(User)
+
+export const updateUserSettings = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  })
+
+  if (!user) {
+    return next(new AppError('User with that id not found', 404))
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: user,
+    },
+  })
+})

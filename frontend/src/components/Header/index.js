@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import clsx from 'clsx'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, getUser, clearDB } from '../../actions/userActions'
+import Main from '../Main'
 import {} from '../../actions/teamActions'
 
 import {
@@ -40,9 +42,20 @@ import SendIcon from '@material-ui/icons/Send'
 import { isOwnerOrAdminUser } from '../../utils/helperFunctions'
 import { useTheme } from '@material-ui/core/styles'
 
-import { useStyles } from './styles'
+import InboxIcon from '@material-ui/icons/MoveToInbox'
+import MailIcon from '@material-ui/icons/Mail'
 
-const Header = ({ history }) => {
+import { useStyles } from './styles'
+import { withRouter } from 'react-router'
+import PropTypes from 'prop-types'
+
+const Header = ({
+  history,
+  children,
+  drawerOpen,
+  drawerClose,
+  drawerToggle,
+}) => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -105,14 +118,18 @@ const Header = ({ history }) => {
   }
 
   const theme = useTheme()
-  const [open, setOpen] = React.useState(false)
+  // const [open, setOpen] = React.useState(false)
 
   const handleDrawerOpen = () => {
-    setOpen(true)
+    drawerOpen()
   }
 
   const handleDrawerClose = () => {
-    setOpen(false)
+    drawerClose()
+  }
+
+  const handleDrawerToggle = () => {
+    drawerToggle()
   }
 
   const handleLinkClick = (value) => {
@@ -120,32 +137,32 @@ const Header = ({ history }) => {
     handleDrawerClose()
   }
 
-  useEffect(() => {
-    if (userInfo) {
-      dispatch(getUser(userInfo._id))
-    }
-    // if (!gotUserInfo && userInfo) {
-    //   // dispatch(getUser(userInfo._id))
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     dispatch(getUser(userInfo._id))
+  //   }
+  //   // if (!gotUserInfo && userInfo) {
+  //   //   // dispatch(getUser(userInfo._id))
 
-    //   // if (!localStorage.getItem('selectedTeam')) {
-    //   //   localStorage.setItem(
-    //   //     'selectedTeam',
-    //   //     userInfo.owner[0]._id ||
-    //   //       userInfo.admin[0]._id ||
-    //   //       userInfo.member[0]._id
-    //   //   )
+  //   //   // if (!localStorage.getItem('selectedTeam')) {
+  //   //   //   localStorage.setItem(
+  //   //   //     'selectedTeam',
+  //   //   //     userInfo.owner[0]._id ||
+  //   //   //       userInfo.admin[0]._id ||
+  //   //   //       userInfo.member[0]._id
+  //   //   //   )
 
-    //   //   setTeamId(localStorage.getItem('selectedTeam'))
-    //   // }
-    // }
-    setTeamId(localStorage.getItem('selectedTeam') || null)
-  }, [
-    createTeamSuccess,
-    updateTeamSuccess,
-    dispatch,
-    userInfo,
-    deleteTeamSuccess,
-  ])
+  //   //   //   setTeamId(localStorage.getItem('selectedTeam'))
+  //   //   // }
+  //   // }
+  //   setTeamId(localStorage.getItem('selectedTeam') || null)
+  // }, [
+  //   createTeamSuccess,
+  //   updateTeamSuccess,
+  //   dispatch,
+  //   userInfo,
+  //   deleteTeamSuccess,
+  // ])
 
   const menuId = 'primary-search-account-menu'
   const renderMenu = (
@@ -202,159 +219,166 @@ const Header = ({ history }) => {
     </Menu>
   )
 
-  const mainDrawer = (
-    <Drawer
-      history={history}
-      className={classes.drawer}
-      variant="persistent"
-      anchor="left"
-      open={open}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <div className={classes.drawerHeader}>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label">Select team</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={teamId}
-            onChange={handleTeamChange}
-          >
-            {gotUserInfo &&
-              [
-                ...gotUserInfo.owner,
-                ...gotUserInfo.admin,
-                ...gotUserInfo.member,
-              ].map((team) => (
-                <MenuItem key={team._id} value={team._id}>
-                  {team.name}
-                </MenuItem>
-              ))}
-            {/* <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem> */}
-            {gotUser && []}
-          </Select>
-        </FormControl>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
-        </IconButton>
-      </div>
-      <Divider />
-      {teamId && (
-        <List>
-          <ListItem button onClick={(e) => handleLinkClick(`/teams/${teamId}`)}>
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Team members" />
-          </ListItem>
+  // const mainDrawer = (
+  //   <Drawer
+  //     history={history}
+  //     className={classes.drawer}
+  //     variant="persistent"
+  //     anchor="left"
+  //     open={open}
+  //     classes={{
+  //       paper: classes.drawerPaper,
+  //     }}
+  //   >
+  //     <div className={classes.drawerHeader}>
+  // <FormControl className={classes.formControl}>
+  //   <InputLabel id="demo-simple-select-label">Select team</InputLabel>
+  //   <Select
+  //     labelId="demo-simple-select-label"
+  //     id="demo-simple-select"
+  //     value={teamId}
+  //     onChange={handleTeamChange}
+  //   >
+  //     {gotUserInfo &&
+  //       [
+  //         ...gotUserInfo.owner,
+  //         ...gotUserInfo.admin,
+  //         ...gotUserInfo.member,
+  //       ].map((team) => (
+  //         <MenuItem key={team._id} value={team._id}>
+  //           {team.name}
+  //         </MenuItem>
+  //       ))}
+  //     {/* <MenuItem value={10}>Ten</MenuItem>
+  //     <MenuItem value={20}>Twenty</MenuItem>
+  //     <MenuItem value={30}>Thirty</MenuItem> */}
+  //     {gotUser && []}
+  //   </Select>
+  // </FormControl>
+  //       <IconButton onClick={handleDrawerClose}>
+  //         {theme.direction === 'ltr' ? (
+  //           <ChevronLeftIcon />
+  //         ) : (
+  //           <ChevronRightIcon />
+  //         )}
+  //       </IconButton>
+  //     </div>
+  //     <Divider />
+  // {teamId && (
+  //   <List>
+  //     <ListItem button onClick={(e) => handleLinkClick(`/teams/${teamId}`)}>
+  //       <ListItemIcon>
+  //         <PeopleIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Team members" />
+  //     </ListItem>
 
-          {isOwnerOrAdminUser(gotUserInfo, teamId) && (
-            <>
-              <ListItem
-                button
-                onClick={(e) => handleLinkClick(`/teams/${teamId}/settings`)}
-              >
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Team settings" />
-              </ListItem>
+  //     {isOwnerOrAdminUser(gotUserInfo, teamId) && (
+  //       <>
+  //         <ListItem
+  //           button
+  //           onClick={(e) => handleLinkClick(`/teams/${teamId}/settings`)}
+  //         >
+  //           <ListItemIcon>
+  //             <SettingsIcon />
+  //           </ListItemIcon>
+  //           <ListItemText primary="Team settings" />
+  //         </ListItem>
 
-              <ListItem
-                button
-                onClick={(e) =>
-                  handleLinkClick(`/teams/${teamId}/settings/feedback`)
-                }
-              >
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Feedback settings" />
-              </ListItem>
-            </>
-          )}
+  //         <ListItem
+  //           button
+  //           onClick={(e) =>
+  //             handleLinkClick(`/teams/${teamId}/settings/feedback`)
+  //           }
+  //         >
+  //           <ListItemIcon>
+  //             <SettingsIcon />
+  //           </ListItemIcon>
+  //           <ListItemText primary="Feedback settings" />
+  //         </ListItem>
+  //       </>
+  //     )}
 
-          <ListItem
-            button
-            onClick={(e) => handleLinkClick(`/teams/${teamId}/charts`)}
-          >
-            <ListItemIcon>
-              <EqualizerIcon />
-            </ListItemIcon>
-            <ListItemText primary="Team charts" />
-          </ListItem>
+  //     <ListItem
+  //       button
+  //       onClick={(e) => handleLinkClick(`/teams/${teamId}/charts`)}
+  //     >
+  //       <ListItemIcon>
+  //         <EqualizerIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Team charts" />
+  //     </ListItem>
 
-          <ListItem
-            button
-            onClick={(e) => handleLinkClick(`/teams/${teamId}/giveFeedback`)}
-          >
-            <ListItemIcon>
-              <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Give feedback" />
-          </ListItem>
-        </List>
-      )}
-      <Divider />
-      <ListItem
-        button
-        onClick={(e) => handleLinkClick(`/users/${userInfo._id}/settings`)}
-      >
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="User settings" />
-      </ListItem>
-      {gotUserInfo && gotUserInfo.role === 'admin' && (
-        <>
-          <Divider />
-          <ListItem button onClick={(e) => handleLinkClick(`/admins/users`)}>
-            <ListItemIcon>
-              <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Manage users" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={(e) => handleLinkClick(`/admins/questions`)}
-          >
-            <ListItemIcon>
-              <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Manage questions" />
-          </ListItem>
-        </>
-      )}
-      <Divider />
-      <div className={classes.drawerFooter}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={(e) => handleLinkClick('/createTeam')}
-        >
-          Create new team
-        </Button>
-      </div>
-    </Drawer>
-  )
+  //     <ListItem
+  //       button
+  //       onClick={(e) => handleLinkClick(`/teams/${teamId}/giveFeedback`)}
+  //     >
+  //       <ListItemIcon>
+  //         <SendIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Give feedback" />
+  //     </ListItem>
+  //   </List>
+  // )}
+  // <Divider />
+  // <ListItem
+  //   button
+  //   onClick={(e) => handleLinkClick(`/users/${userInfo._id}/settings`)}
+  // >
+  //   <ListItemIcon>
+  //     <SendIcon />
+  //   </ListItemIcon>
+  //   <ListItemText primary="User settings" />
+  // </ListItem>
+  // {gotUserInfo && gotUserInfo.role === 'admin' && (
+  //   <>
+  //     <Divider />
+  //     <ListItem button onClick={(e) => handleLinkClick(`/admins/users`)}>
+  //       <ListItemIcon>
+  //         <SendIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Manage users" />
+  //     </ListItem>
+  //     <ListItem
+  //       button
+  //       onClick={(e) => handleLinkClick(`/admins/questions`)}
+  //     >
+  //       <ListItemIcon>
+  //         <SendIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Manage questions" />
+  //     </ListItem>
+  //   </>
+  // )}
+  //     <Divider />
+  // <div className={classes.drawerFooter}>
+  //   <Button
+  //     variant="contained"
+  //     color="primary"
+  //     onClick={(e) => handleLinkClick('/createTeam')}
+  //   >
+  //     Create new team
+  //   </Button>
+  // </div>
+  //   </Drawer>
+  // )
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar
+        position="fixed"
+        // className={clsx(classes.appBar, {
+        //   [classes.appBarShift]: open,
+        // })}
+        className={classes.appBar}
+      >
         <Container maxWidth="xl">
           <Toolbar>
             {userInfo && (
               <>
                 <IconButton
-                  onClick={handleDrawerOpen}
+                  // onClick={handleDrawerOpen}
+                  onClick={handleDrawerToggle}
                   edge="start"
                   className={classes.menuButton}
                   color="inherit"
@@ -432,12 +456,61 @@ const Header = ({ history }) => {
           </Toolbar>
         </Container>
       </AppBar>
-      {userInfo && mainDrawer}
-
+      {/* {userInfo && mainDrawer} */}
+      {/* <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
+      >
+        <div className={classes.toolbar}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer> */}
+      {/* <Main>{children}</Main> */}
       {renderMobileMenu}
       {renderMenu}
     </div>
   )
 }
 
-export default Header
+Header.propTypes = {
+  drawerToggle: PropTypes.func.isRequired,
+}
+
+export default withRouter(Header)

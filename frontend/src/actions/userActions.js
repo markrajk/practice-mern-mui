@@ -19,6 +19,9 @@ import {
   USER_UPDATE_ONE_REQUEST,
   USER_UPDATE_ONE_SUCCESS,
   USER_UPDATE_ONE_FAIL,
+  USER_UPDATE_SETTINGS_REQUEST,
+  USER_UPDATE_SETTINGS_SUCCESS,
+  USER_UPDATE_SETTINGS_FAIL,
   CLEAR_DB_REQUEST,
   CLEAR_DB_SUCCESS,
   CLEAR_DB_FAIL,
@@ -279,6 +282,57 @@ export const updateUser = (userId, user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_ONE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const updateUserSettings = (userId, settings) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_SETTINGS_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.patch(
+      `/api/v1/users/${userId}/settings`,
+      { ...settings },
+      config
+    )
+
+    const updatedUser = data.data.data
+    updatedUser.token = userInfo.token
+
+    dispatch({
+      type: USER_UPDATE_SETTINGS_SUCCESS,
+      payload: updatedUser,
+    })
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: updatedUser,
+    })
+
+    localStorage.setItem('userInfo', JSON.stringify(updatedUser))
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_SETTINGS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

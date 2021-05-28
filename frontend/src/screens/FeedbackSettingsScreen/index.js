@@ -26,8 +26,10 @@ import {
 import Question from './Question'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { useStyles } from './styles'
+import { useTheme } from '@material-ui/core/styles'
 
 const FeedbackSettingsScreen = ({ match }) => {
+  const theme = useTheme()
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -185,6 +187,19 @@ const FeedbackSettingsScreen = ({ match }) => {
     dispatch(deleteQuestion(match.params.id, id))
   }
 
+  const [changeTheme, setChangeTheme] = useState(false)
+
+  const handleTheme = () => {
+    setChangeTheme(!changeTheme)
+    if (!changeTheme) {
+      theme.palette.type = 'light'
+    } else {
+      theme.palette.type = 'dark'
+    }
+
+    console.log(theme.palette.type)
+  }
+
   useEffect(() => {
     dispatch(getAllQuestions(match.params.id))
   }, [
@@ -217,6 +232,9 @@ const FeedbackSettingsScreen = ({ match }) => {
         <Typography variant="p" className={classes.headerTitle}>
           Feedback settings
         </Typography>
+        <Button color="primary" varianant="contained" onClick={handleTheme}>
+          TOGGLE THEM
+        </Button>
         <div className={classes.headerBottom}>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="age-native-simple">Select category</InputLabel>

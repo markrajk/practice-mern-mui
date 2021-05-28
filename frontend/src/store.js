@@ -8,6 +8,7 @@ import {
   getUserReducer,
   getAllUserReducer,
   updateUserReducer,
+  updateUserSettingsReducer,
   clearDBReducer,
 } from './reducers/userReducers'
 import {
@@ -64,6 +65,7 @@ const reducer = combineReducers({
   userLogin: userLoginReducer,
   updateMe: updateMeReducer,
   updateUser: updateUserReducer,
+  updateUserSettings: updateUserSettingsReducer,
   getUser: getUserReducer,
   getAllUser: getAllUserReducer,
   postList: postListReducer,

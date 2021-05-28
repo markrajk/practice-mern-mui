@@ -3,16 +3,13 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from './store'
 import reportWebVitals from './reportWebVitals'
-import { ThemeProvider } from 'styled-components'
-import { GlobalStyles, theme } from './styles'
+// import { ThemeProvider } from '@material-ui/core/styles'
+// import { GlobalStyles, theme } from './styles'
 import App from './App'
 
 ReactDOM.render(
   <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <App />
-    </ThemeProvider>
+    <App />
   </Provider>,
   document.getElementById('root')
 )

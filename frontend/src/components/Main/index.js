@@ -1,20 +1,12 @@
 import React from 'react'
 // import { Container } from './styles'
 import { Container } from '@material-ui/core'
+import { useStyles } from './styles'
 
 const Main = ({ children }) => {
+  const classes = useStyles()
   return (
-    <Container
-      maxWidth="lg"
-      style={{
-        paddingTop: '2.5em',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        width: '100%',
-        height: 'calc(100% - 64px)',
-      }}
-    >
+    <Container className={classes.root} maxWidth="lg">
       {children}
     </Container>
   )

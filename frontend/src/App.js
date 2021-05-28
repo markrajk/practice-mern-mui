@@ -1,8 +1,8 @@
 import React from 'react'
+
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import AuthCard from './components/Card'
-import Main from './components/Main'
-import Header from './components/Header'
+import Layout from './components/Layout'
 import CreateTeamScreen from './screens/CreateTeam'
 import HomeScreen from './screens/HomeScreen'
 import UserSettingsScreen from './screens/UserSettingsScreen'
@@ -18,8 +18,7 @@ import AdminQuestionsScreen from './screens/AdminQuestionsScreen'
 const App = () => {
   return (
     <Router>
-      <Route path="/" component={Header} />
-      <Main>
+      <Layout>
         <Route exact path="/" component={HomeScreen} />
         <Route
           exact
@@ -65,7 +64,7 @@ const App = () => {
           path="/admins/questions"
           component={AdminQuestionsScreen}
         />
-      </Main>
+      </Layout>
     </Router>
   )
 }

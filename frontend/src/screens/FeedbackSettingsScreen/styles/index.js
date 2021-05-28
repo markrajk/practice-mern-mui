@@ -9,6 +9,7 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     width: '100%',
     height: '100%',
+    // backgroundColor: theme.colors.black,
   },
   header: {
     width: '100%',

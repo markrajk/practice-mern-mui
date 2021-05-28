@@ -19,16 +19,6 @@ export default createGlobalStyle`
       box-sizing: border-box;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
-      /* background-color: ${theme.colors.background} */
-
-      /* overflow-y: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-
-      &::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-      } */
     }
 
     #root {
